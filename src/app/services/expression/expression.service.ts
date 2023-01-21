@@ -2,10 +2,10 @@ import { Injectable } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
 
-interface Node {
+interface INode {
   value: string;
-  left: Node | null;
-  right: Node | null;
+  left: INode | null;
+  right: INode | null;
 }
 
 @Injectable({
@@ -58,6 +58,7 @@ export class ExpressionService {
     const result = this._parseTree(tree);
     return result;
   }
+
   /*
   * ----------------------------------------------------------
   * Private Methods
@@ -168,15 +169,15 @@ export class ExpressionService {
    *
    * @param {string[]} postfix array of operators and operands in postfix.
    * @description Create a binary tree from postfix array.
-   * @return {Node} return the root of the tree.
+   * @return {INode} return the root of the tree.
    * */
-  private _constructTree(postfix:string[]): Node{
-    let st: Node[] = [];
+  private _constructTree(postfix:string[]): INode{
+    let st: INode[] = [];
     for (let i = 0; i < postfix.length; i++) {
       if (!this._isOperator(postfix[i])) {
         st.push({value: postfix[i], left: null, right: null});
       } else {
-        let t: Node = {value: postfix[i], left: null, right: null};
+        let t: INode = {value: postfix[i], left: null, right: null};
         if (postfix[i] === "sin" || postfix[i] === "cos" || postfix[i] === "tan") {
           t.right = st.pop();
         } else {
@@ -193,11 +194,11 @@ export class ExpressionService {
    * @ngdoc function
    * @name _parseTree
    *
-   * @param {root} Node root of the tree.
+   * @param {root} INode root of the tree.
    * @description Traverse the tree evaluation each node.
    * @return {any} return the result of the evaluation
    * */
-  private _parseTree(root: Node): any{
+  private _parseTree(root: INode): any{
     if (root === null) {
       return 0;
     }

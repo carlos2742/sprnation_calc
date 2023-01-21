@@ -1,1 +1,13 @@
-<p>calculator works!</p>
+<div class="calculator">
+  <section class="calculator-screen">
+    <button (click)="addRand()" [disabled]="loadingRand">rand</button>
+    <label for="expression" class="calculator-screen-result">{{result$ | async}}</label>
+    <input id="expression" type="text" class="calculator-screen-input" [formControl]="mathExpression" (keypress)="onKeyPress($event)">
+  </section>
+  <section class="calculator-buttons">
+    <div class="calculator-buttons-container">
+      <button *ngFor="let button of buttons" [disabled]="loadingRand" [textContent]="button.value" (click)="button.fn()" [style]="{'grid-column-start':button.col, 'grid-row-start':button.row}"></button>
+    </div>
+  </section>
+</div>
+
