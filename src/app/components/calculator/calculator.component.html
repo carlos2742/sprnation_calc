@@ -9,5 +9,14 @@
       <button *ngFor="let button of buttons" [disabled]="loadingRand" [textContent]="button.value" (click)="button.fn()" [style]="{'grid-column-start':button.col, 'grid-row-start':button.row}"></button>
     </div>
   </section>
+  <section class="calculator-expression-test">
+    <ul>
+      <li *ngFor="let expr of expressionTest">
+        <span class="expression" [textContent]="expr"></span>
+        <span>=</span>
+        <span class="result" [textContent]="evaluate(expr)"></span>
+      </li>
+    </ul>
+  </section>
 </div>
 

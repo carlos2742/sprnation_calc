@@ -23,6 +23,7 @@ export class CalculatorComponent implements OnInit, OnDestroy{
   public mathExpression: FormControl;
   public result$: Subject<string>;
   public loadingRand: boolean;
+  public expressionTest: any[];
 
   private _subscriptions: Subscription[];
 
@@ -110,17 +111,18 @@ export class CalculatorComponent implements OnInit, OnDestroy{
     this.mathExpression = new FormControl('');
     this.result$ = new Subject<string>();
     this.loadingRand = false;
+    this.expressionTest = ['sin(sin(30)+cos(20))','sin(30)+cos(20)','sin(30','3++','3+'];
     this._subscriptions = [];
   }
 
   ngOnInit() {
     this._generateNumbers();
-    const sub = this.mathExpression.valueChanges.subscribe(value => {
+    const sub = this.mathExpression.valueChanges.subscribe((value: string) => {
+      this.result$.next('');
       if(value === ''){
         this.result$.next('');
       } else {
-        const val = this._expression.evaluate(value);
-        this.result$.next(val);
+        this.result$.next(this.evaluate(value));
       }
     });
     this._subscriptions.push(sub);
@@ -131,12 +133,30 @@ export class CalculatorComponent implements OnInit, OnDestroy{
       this._subscriptions.forEach(subscription => subscription.unsubscribe());
     }
   }
-
   /*
   * ----------------------------------------------------------
   * Public Methods
   * ----------------------------------------------------------
   * */
+  /**
+   * @ngdoc function
+   * @name evaluate
+   *
+   * @param {string} expression
+   * @description Validate and evaluate expression
+   * @return {string} expression result if it is valid else wrong syntax error
+   * */
+  evaluate(expression: string): string{
+    if(!this._expression.isWellFormed(expression)){
+      return 'Wrong Syntax';
+    }else{
+      try{
+        return this._expression.evaluate(expression);
+      } catch (e) {
+        return 'Wrong Syntax';
+      }
+    }
+  }
   /**
    * @ngdoc function
    * @name onKeyPress
@@ -152,7 +172,6 @@ export class CalculatorComponent implements OnInit, OnDestroy{
       if(button) button.fn();
     }
   }
-
   /**
    * @ngdoc function
    * @name addRand
@@ -171,7 +190,6 @@ export class CalculatorComponent implements OnInit, OnDestroy{
     });
     this._subscriptions.push(sub);
   }
-
   /*
   * ----------------------------------------------------------
   * Private Methods
@@ -187,7 +205,6 @@ export class CalculatorComponent implements OnInit, OnDestroy{
   private _addOperationFn(operation: string): void {
     this._updateMathExpression(operation);
   }
-
   /**
    * @ngdoc function
    * @name _clear
@@ -198,7 +215,6 @@ export class CalculatorComponent implements OnInit, OnDestroy{
     this._updateMathExpression('', 'replace');
     this.result$.next('');
   }
-
   /**
    * @ngdoc function
    * @name _generateNumbers
@@ -229,7 +245,6 @@ export class CalculatorComponent implements OnInit, OnDestroy{
       this.buttons.push(btn);
     };
   }
-
   /**
    * @ngdoc function
    * @name _updateMathExpression
