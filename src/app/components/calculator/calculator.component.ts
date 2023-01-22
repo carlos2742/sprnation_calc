@@ -182,12 +182,17 @@ export class CalculatorComponent implements OnInit, OnDestroy{
     this.loadingRand = true;
     this.mathExpression.disable();
     this.result$.next('loading number...');
-    const sub = this._expression.generateRandNumber().subscribe((val: number) => {
-      this.loadingRand = false;
-      this.mathExpression.enable();
-      this.result$.next('');
-      this._updateMathExpression(val.toString());
-    });
+    const sub = this._expression.generateRandNumber().subscribe(
+      (val: number) => {
+        this.loadingRand = false;
+        this.mathExpression.enable();
+        this.result$.next('');
+        this._updateMathExpression(val.toString());
+      }, error => {
+        this.loadingRand = false;
+        this.mathExpression.enable();
+        this.result$.next('load failed');
+      });
     this._subscriptions.push(sub);
   }
   /*

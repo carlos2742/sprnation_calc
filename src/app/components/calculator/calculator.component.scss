@@ -1,4 +1,11 @@
 :host{
+  button{
+    font-size: 20px;
+    font-weight: lighter;
+    font-family: "Roboto";
+    border: 1px solid #ccc;
+    cursor: pointer;
+  }
   display: flex;
   justify-content: center;
   .calculator{
@@ -18,6 +25,8 @@
       flex-direction: column;
       button{
         position: absolute;
+        background-color: #f1f3f4;
+        padding: 5px;
       }
       &-result{
         height: 25px;
@@ -43,9 +52,19 @@
         display: grid;
         grid-template-columns: repeat(4, 1fr);
         grid-template-rows: repeat(4, 1fr);
+        button{
+          padding: 10px 0;
+          &.operator{
+            background-color: #dadce0;
+          }
+          &.operand{
+            background-color: #f1f3f4;
+          }
+        }
       }
     }
     &-expression-test{
+      font-family: "Roboto";
       width: 100%;
       ul{
         padding-left: 20px;
@@ -56,6 +75,7 @@
           }
           .result{
             padding-left: 10px;
+            font-weight: bold;
           }
         }
       }
